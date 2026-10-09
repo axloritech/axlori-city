@@ -16,13 +16,13 @@ type Props = {
 };
 
 const APPS: Array<{ id: AppId; name: string; icon: string; color: string; description: string }> = [
-  { id: "money", name: "Money", icon: "₦", color: "#5e9674", description: "Cash & activity" },
-  { id: "jobs", name: "Jobs", icon: "↗", color: "#df9a4a", description: "Find a shift" },
-  { id: "investments", name: "Invest", icon: "▥", color: "#638c9a", description: "Demo portfolio" },
-  { id: "cars", name: "My Cars", icon: "▰", color: "#d27a54", description: "Your garage" },
-  { id: "properties", name: "Properties", icon: "⌂", color: "#8d7a5a", description: "Homes & listings" },
-  { id: "companies", name: "Companies", icon: "▦", color: "#8b78a3", description: "Build a business" },
-  { id: "forbes", name: "Axlori Forbes", icon: "✦", color: "#c69a4b", description: "Local wealth list" },
+  { id: "money", name: "Money", icon: "₦", color: "#b56a2c", description: "Cash & activity" },
+  { id: "jobs", name: "Jobs", icon: "↗", color: "#535c65", description: "Find a shift" },
+  { id: "investments", name: "Invest", icon: "▥", color: "#4d6267", description: "Demo portfolio" },
+  { id: "cars", name: "My Cars", icon: "▰", color: "#654a39", description: "Your garage" },
+  { id: "properties", name: "Properties", icon: "⌂", color: "#60594f", description: "Homes & listings" },
+  { id: "companies", name: "Companies", icon: "▦", color: "#594f5b", description: "Build a business" },
+  { id: "forbes", name: "Axlori Forbes", icon: "✦", color: "#78623c", description: "Local wealth list" },
 ];
 
 const money = (amount: number) => `₦${Math.max(0, Math.floor(amount)).toLocaleString("en-NG")}`;

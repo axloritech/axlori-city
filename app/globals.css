@@ -3,36 +3,38 @@
 @source "../components";
 
 @theme {
-  --color-ink: #171c18;
-  --color-leaf: #adbe82;
-  --color-ember: #eea64a;
-  --color-cream: #f3eedc;
+  --color-ink: #17191D;
+  --color-leaf: #89938f;
+  --color-ember: #F29A38;
+  --color-cream: #F5F5F5;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --shadow-panel: 0 18px 60px rgba(9, 18, 13, .38);
+  --shadow-panel: 0 18px 60px rgba(8, 10, 13, .4);
 }
 
 :root {
   color-scheme: dark;
-  --ink: #17201a;
-  --ink-soft: #222d25;
-  --cream: #f3eedc;
-  --muted: #9eaa98;
-  --gold: #efb553;
-  --coral: #e77c56;
-  --leaf: #72a486;
-  --line: rgba(235, 230, 204, .12);
+  --ink: #17191D;
+  --ink-soft: #202329;
+  --cream: #F5F5F5;
+  --muted: #B9BEC7;
+  --gold: #E8BB65;
+  --coral: #F29A38;
+  --leaf: #929b96;
+  --line: rgba(239, 242, 246, .12);
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #111812; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #202329; overscroll-behavior: none; }
 body { color: var(--cream); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
 button, input, select { font: inherit; }
 button { color: inherit; }
 button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #f5bf5e; outline-offset: 2px; }
 
-.game-shell { position: relative; width: 100vw; height: 100dvh; min-height: 100%; overflow: hidden; isolation: isolate; background: #182119; user-select: none; }
-.game-shell canvas { display: block; width: 100% !important; height: 100% !important; image-rendering: pixelated; touch-action: none; }
-.game-vignette { pointer-events: none; position: absolute; inset: 0; z-index: 2; background: radial-gradient(ellipse at center, transparent 46%, rgba(14, 21, 15, .14) 100%); }
+.game-shell { position: relative; width: 100vw; height: 100dvh; min-height: 100%; overflow: hidden; isolation: isolate; background: #202329; user-select: none; -webkit-user-select: none; overscroll-behavior: none; }
+.game-shell canvas { display: block; width: 100% !important; height: 100% !important; image-rendering: auto; touch-action: none; }
+.game-vignette { pointer-events: none; position: absolute; inset: 0; z-index: 2; background: radial-gradient(ellipse at center, transparent 55%, rgba(8, 10, 13, .26) 100%); }
+.game-canvas-frame, .game-canvas-loading { position: absolute; inset: 0; overflow: hidden; background: #a8bdc5; touch-action: none; }
+.game-canvas-loading { background: linear-gradient(180deg, #94aeb8 0%, #879184 55%, #535c56 100%); }
 .game-hud { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
 .game-hud button, .game-hud input { pointer-events: auto; }
 
@@ -325,3 +327,301 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px s
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Axlori City 3D pass: charcoal UI, restrained orange highlights and touch-first camera controls. */
+.game-vignette { background: radial-gradient(ellipse at center, transparent 58%, rgba(8, 10, 13, .27) 100%); }
+.game-shell button { -webkit-tap-highlight-color: transparent; }
+.game-shell :focus-visible { outline-color: #F29A38; }
+.camera-look-pad { display: none; }
+.brand-badge, .quick-action, .hud-time-chip, .hud-weather-chip, .hud-money-chip, .hud-profile-chip,
+.hud-job-card, .hud-health-panel, .hud-map-card, .hud-controls-tip, .inside-house-chip, .placement-tools,
+.interaction-prompt, .game-toast {
+  border-color: rgba(235, 239, 244, .13);
+  background: rgba(23, 25, 29, .88);
+  box-shadow: 0 8px 25px rgba(7, 9, 12, .26);
+  backdrop-filter: blur(7px);
+}
+.brand-badge { background: rgba(23, 25, 29, .94); }
+.brand-mark { background: #F29A38; }
+.brand-mark i, .brand-mark i:nth-child(4) { background: #202329; }
+.brand-mark i:nth-child(2) { background: #F5F5F5; }
+.brand-mark i:nth-child(3) { background: #E8BB65; }
+.brand-copy strong, .hud-time-chip strong, .hud-money-chip strong, .hud-profile-chip b { color: #F5F5F5; }
+.brand-copy small, .hud-time-chip small, .hud-money-chip small, .hud-profile-chip small,
+.hud-location small, .job-card-top, .hud-controls-tip > div small { color: #B9BEC7; }
+.quick-action, .hud-profile-chip { color: #F5F5F5; }
+.quick-action:hover { background: #292d33; }
+.quick-action span, .time-orb, .hud-money-chip > span, .hud-weather-chip span, .job-card-arrow { color: #F29A38; }
+.hud-weather-chip.weather-cloudy span { color: #b9bec7; }
+.hud-weather-chip.weather-rain span { color: #9cc6d8; }
+.hud-left-stack { width: min(228px, 25vw); }
+.hud-job-card { width: min(226px, 25vw); min-height: 73px; }
+.hud-job-card > small { color: #B9BEC7; }
+.job-pulse { background: #F29A38; box-shadow: 0 0 8px rgba(242, 154, 56, .65); }
+.hud-health-panel { width: 190px; }
+.meter-copy small { color: #B9BEC7; }
+.health-track i { background: #e47f63; }
+.energy-track i { background: #E8BB65; }
+.hud-map-card { width: 196px; padding: 7px; }
+.map-card-head { color: #D9DCE2; }
+.map-card-head > span i { background: #F29A38; }
+.map-card-head button { color: #F29A38; background: rgba(242, 154, 56, .13); }
+.map-card-foot { color: #B9BEC7; }
+.map-card-foot b { color: #d9dce2; }
+.legend-player { background: #F29A38; }
+.legend-shop { background: #E8BB65; }
+.hud-controls-tip { background: rgba(23, 25, 29, .92); border-color: rgba(235, 239, 244, .12); }
+.keyboard-key { color: #F5F5F5; border-color: rgba(236, 239, 244, .18); background: rgba(255, 255, 255, .07); }
+.key-e, .key-phone { color: #F29A38; border-color: rgba(242, 154, 56, .32); }
+.hud-controls-tip > div b { color: #F5F5F5; }
+.inside-house-chip { background: rgba(23, 25, 29, .94); }
+.inside-house-chip > span { color: #F29A38; background: rgba(242, 154, 56, .13); }
+.inside-house-chip small { color: #B9BEC7; }
+.inside-house-chip button, .placement-tools button { border-color: rgba(242, 154, 56, .36); background: rgba(242, 154, 56, .12); color: #F6BD79; }
+.placement-tools { background: rgba(23, 25, 29, .96); }
+.placement-tools > span { color: #D9DCE2; }
+.interaction-prompt { background: rgba(23, 25, 29, .96); border-color: rgba(242, 154, 56, .45); color: #F5F5F5; }
+.prompt-key { background: #F29A38; color: #17191D; box-shadow: none; }
+.prompt-tap { color: #B9BEC7; border-color: rgba(255,255,255,.14); }
+.game-toast { color: #F5F5F5; border-color: rgba(255,255,255,.13); }
+.game-toast > span, .loading-dot { color: #F29A38; background-color: #F29A38; }
+.error-toast { color: #ffd1c1; }
+.nap-overlay { background: rgba(12, 14, 18, .55); backdrop-filter: blur(4px); }
+.nap-card { background: #202329; border-color: rgba(242,154,56,.25); }
+.nap-card > small, .nap-card p, .nap-seconds-label, .nap-rest-note { color: #B9BEC7; }
+.nap-moon { color: #E8BB65; background: rgba(232,187,101,.13); }
+.nap-card > strong { color: #E8BB65; }
+.nap-progress i { background: #F29A38; }
+.panel-backdrop, .phone-backdrop { background: rgba(8, 10, 13, .7); backdrop-filter: blur(4px); }
+.game-panel { background: #202329; border-color: rgba(245,245,245,.12); }
+.game-panel-header { background: #1b1e23; border-color: rgba(245,245,245,.1); }
+.panel-heading-mark, .menu-pause-symbol { color: #F29A38; background: rgba(242,154,56,.12); }
+.game-panel-header > div:nth-child(2) > span, .menu-resume-banner span:first-child { color: #B9BEC7; }
+.game-panel-header h2, .menu-resume-banner strong, .menu-action div b { color: #F5F5F5; }
+.panel-close { background: #292d33; color: #F5F5F5; border-color: rgba(245,245,245,.12); }
+.game-panel-content { scrollbar-color: #59616b #202329; }
+.game-panel-content::-webkit-scrollbar-thumb, .phone-scroll-view::-webkit-scrollbar-thumb { background: #59616b; }
+.menu-resume-banner, .menu-action { background: rgba(255,255,255,.035); border-color: rgba(245,245,245,.11); }
+.menu-resume-banner > div > span:first-child, .menu-action div small { color: #B9BEC7; }
+.menu-action > span { background: rgba(242,154,56,.12); color: #F29A38; }
+.menu-action:hover { border-color: rgba(242,154,56,.35); background: rgba(242,154,56,.07); }
+.panel-toast, .phone-toast-notice { background: rgba(242,154,56,.09); border-color: rgba(242,154,56,.2); color: #F5F5F5; }
+.panel-toast > span, .phone-toast-notice > span { color: #F29A38; }
+.phone-shell { background: #17191D; border-color: rgba(245,245,245,.17); box-shadow: 0 30px 100px rgba(0,0,0,.6), inset 0 0 0 4px #22262c; }
+.phone-notch { background: #17191D; }
+.phone-notch span { background: #42474e; }
+.phone-statusbar { color: #F5F5F5; }
+.phone-status-right, .phone-eyebrow, .phone-card-kicker { color: #B9BEC7; }
+.phone-app-area { background: #202329; border-color: rgba(245,245,245,.1); }
+.phone-header { background: #1b1e23; border-color: rgba(245,245,245,.1); }
+.phone-back-button, .phone-close-button { color: #F29A38; border-color: rgba(242,154,56,.24); background: rgba(242,154,56,.08); }
+.phone-title-block h2, .phone-greeting strong, .phone-app-name { color: #F5F5F5; }
+.phone-greeting > div > span, .phone-app-description, .phone-info-strip small, .phone-demo-caption { color: #B9BEC7; }
+.phone-money-pill { color: #F6C17B; background: rgba(242,154,56,.12); }
+.phone-app-tile, .phone-info-strip, .phone-property-card, .phone-job-card, .phone-investment-card,
+.phone-action-row, .phone-owned-company, .phone-company-listing, .phone-car-card, .phone-empty-card {
+  background: rgba(255,255,255,.035);
+  border-color: rgba(245,245,245,.1);
+}
+.phone-app-tile:hover, .phone-action-row:hover { background: rgba(242,154,56,.075); border-color: rgba(242,154,56,.28); }
+.phone-app-icon { filter: saturate(.82); }
+.phone-section-heading h3, .phone-info-strip b, .phone-job-card h4, .phone-property-card h4,
+.phone-investment-main b, .phone-action-row b, .phone-owned-company b, .company-listing-head b,
+.phone-car-details h3, .forbes-row > div b { color: #F5F5F5; }
+.phone-section-heading > div > span, .phone-section-heading .phone-live-tag, .phone-job-location,
+.phone-property-card p, .phone-property-card > small, .phone-investment-main small,
+.phone-company-hero p, .phone-form-intro p, .phone-car-details p, .phone-owned-company small,
+.phone-owned-company > p, .company-listing-bottom > span { color: #B9BEC7; }
+.phone-live-tag { border-color: rgba(242,154,56,.25); background: rgba(242,154,56,.08); color: #F6C17B; }
+.phone-balance-card { background: #292e35; border-color: rgba(232,187,101,.24); }
+.phone-balance-card > strong, .phone-balance-bottom b, .phone-money-pill, .phone-job-card-top > b,
+.phone-property-card > b, .investment-price b, .registration-cost b, .company-listing-head > strong,
+.forbes-row > strong, .forbes-banner h3, .forbes-rank { color: #E8BB65; }
+.phone-primary-button, .phone-grant-card button, .investment-actions button, .company-listing-bottom button {
+  background: #F29A38;
+  border-color: #F29A38;
+  color: #17191D;
+}
+.phone-primary-button:hover, .phone-grant-card button:hover, .investment-actions button:hover, .company-listing-bottom button:hover { background: #E8BB65; }
+.phone-primary-button:disabled, .phone-grant-card button:disabled, .investment-actions button:disabled, .company-listing-bottom button:disabled { opacity: .45; background: #59616b; border-color: #59616b; color: #F5F5F5; }
+.phone-current-job, .phone-company-hero, .phone-form-intro, .phone-investment-intro, .forbes-banner { background: rgba(255,255,255,.045); border-color: rgba(245,245,245,.11); }
+.phone-job-status, .phone-validation-note, .phone-action-row > strong, .phone-weather-dot { color: #F29A38; }
+.phone-company-form label { color: #D9DCE2; }
+.phone-company-form input, .phone-company-form select { background: #17191D; color: #F5F5F5; border-color: rgba(245,245,245,.14); }
+.registration-cost { background: rgba(232,187,101,.09); color: #B9BEC7; }
+.phone-car-art { background: radial-gradient(ellipse, rgba(242,154,56,.22), transparent 67%), #252a31; }
+.phone-car-art > span { background: #F29A38; color: #17191D; }
+.phone-home-indicator span { background: rgba(245,245,245,.68); }
+
+.camera-look-pad { position: absolute; inset: 88px 0 135px auto; width: 52%; z-index: 0; pointer-events: auto; touch-action: none; }
+.mobile-run-button, .mobile-drive-controls button {
+  min-width: 74px; min-height: 45px; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 0 11px; border: 1px solid rgba(245,245,245,.15); border-radius: 13px;
+  background: rgba(23,25,29,.92); color: #F5F5F5; box-shadow: 0 8px 20px rgba(0,0,0,.26);
+  font: 800 9px ui-monospace, monospace; letter-spacing: .08em; touch-action: none; user-select: none;
+}
+.mobile-run-button { color: #E8BB65; }
+.mobile-drive-controls { display: flex; gap: 6px; }
+.mobile-drive-controls button:first-child { background: #F29A38; border-color: #F29A38; color: #17191D; }
+.mobile-drive-controls button:last-child { color: #F5F5F5; }
+
+@media (max-width: 800px) {
+  .camera-look-pad { display: block; }
+  .hud-top-row { left: 8px; right: 8px; top: max(7px, env(safe-area-inset-top)); gap: 5px; }
+  .brand-badge { min-width: 112px; width: 112px; height: 40px; border-radius: 11px; background: rgba(23,25,29,.94); }
+  .brand-copy strong { font-size: 10px; }
+  .hud-quick-actions { gap: 4px; }
+  .quick-action { height: 34px; padding: 0 7px; border-radius: 9px; }
+  .quick-action b { font-size: 7px; }
+  .quick-action span { font-size: 14px; }
+  .hud-status-cluster { gap: 4px; }
+  .hud-time-chip, .hud-weather-chip, .hud-money-chip, .hud-profile-chip { height: 39px; border-radius: 10px; }
+  .hud-time-chip { min-width: 75px; padding: 4px 6px; gap: 4px; }
+  .time-orb { width: 22px; height: 22px; font-size: 15px; }
+  .hud-time-chip strong { font-size: 9px; }
+  .hud-time-chip small, .hud-money-chip small, .hud-profile-chip small { font-size: 6px; }
+  .hud-weather-chip { min-width: 57px; padding: 0 6px; gap: 4px; }
+  .hud-weather-chip b { font-size: 7px; }
+  .hud-money-chip { min-width: 79px; gap: 4px; padding: 4px 6px; }
+  .hud-money-chip > span { font-size: 14px; }
+  .hud-money-chip strong { font-size: 9px; }
+  .hud-profile-chip { min-width: 58px; padding: 3px 5px; gap: 4px; }
+  .avatar-pixel { width: 26px; height: 26px; }
+  .hud-profile-chip b { font-size: 8px; }
+  .hud-left-stack { top: 91px; left: 8px; width: 165px; gap: 5px; }
+  .hud-location { gap: 5px; }
+  .location-pin { width: 22px; height: 22px; }
+  .hud-location strong { font-size: 10px; }
+  .hud-job-card { width: 160px; min-height: 55px; padding: 6px 8px; border-radius: 9px; }
+  .job-card-top { font-size: 6px; }
+  .hud-job-card > strong { margin-top: 3px; font-size: 9px; }
+  .hud-job-card > small { max-width: 145px; font-size: 7px; }
+  .hud-health-panel { left: 9px; bottom: calc(138px + env(safe-area-inset-bottom)); width: 132px; gap: 5px; padding: 7px 8px; border-radius: 10px; }
+  .health-line { grid-template-columns: 12px 39px 1fr; gap: 4px; }
+  .health-icon, .energy-icon { font-size: 12px; }
+  .meter-copy small { font-size: 6px; }
+  .meter-copy strong { font-size: 8px; }
+  .meter-track { height: 4px; }
+  .hud-map-card { top: auto; right: 8px; bottom: calc(138px + env(safe-area-inset-bottom)); width: clamp(112px, 30vw, 145px); padding: 5px; }
+  .map-card-head { font-size: 6px; }
+  .map-card-foot { font-size: 5px; }
+  .hud-controls-tip { display: none; }
+  .virtual-stick-wrap { left: 14px; bottom: calc(15px + env(safe-area-inset-bottom)); }
+  .virtual-stick { width: clamp(105px, 29vw, 124px); height: clamp(105px, 29vw, 124px); border-color: rgba(245,245,245,.2); background: radial-gradient(circle at 50% 45%, rgba(76,83,89,.78), rgba(23,25,29,.82)); }
+  .mobile-action-stack { right: 12px; bottom: calc(15px + env(safe-area-inset-bottom)); gap: 6px; }
+  .mobile-phone-button, .mobile-interact-button, .mobile-furnish-button { min-width: 76px; min-height: 42px; border-color: rgba(245,245,245,.16); border-radius: 12px; background: rgba(23,25,29,.95); color: #F5F5F5; font-size: 8px; }
+  .mobile-phone-button span { color: #E8BB65; }
+  .mobile-interact-button { border-color: #F29A38; background: #F29A38; color: #17191D; }
+  .mobile-interact-button span { color: #17191D; }
+  .mobile-furnish-button { color: #F29A38; }
+  .mobile-run-button, .mobile-drive-controls button { min-width: 64px; min-height: 39px; border-radius: 11px; font-size: 8px; }
+  .mobile-drive-controls { gap: 5px; }
+  .inside-house-chip { top: 62px; right: 8px; min-height: 38px; gap: 6px; padding: 5px 7px; }
+  .inside-house-chip > span { width: 25px; height: 25px; }
+  .inside-house-chip b { font-size: 8px; }
+  .inside-house-chip small { font-size: 6px; }
+  .inside-house-chip button { padding: 6px; font-size: 7px; }
+  .placement-tools { top: 108px; right: 8px; gap: 3px; padding: 4px; }
+  .placement-tools > span { display: none; }
+  .placement-tools button { padding: 7px 6px; font-size: 7px; }
+  .interaction-prompt { bottom: calc(132px + env(safe-area-inset-bottom)); min-height: 40px; max-width: calc(100vw - 38px); gap: 7px; padding: 5px 8px 5px 6px; border-radius: 11px; }
+  .interaction-prompt > span:nth-child(2) { font-size: 9px; }
+  .prompt-key { width: 27px; height: 27px; font-size: 12px; }
+  .prompt-tap { font-size: 6px; padding-left: 6px; }
+  .hud-toast-stack { bottom: calc(190px + env(safe-area-inset-bottom)); width: min(90vw, 420px); }
+  .game-toast { font-size: 10px; padding: 8px 10px; }
+  .panel-backdrop { padding: 8px; }
+  .game-panel { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); border-radius: 17px; }
+  .game-panel-content { padding: 13px; }
+  .phone-backdrop { padding: max(5px, env(safe-area-inset-top)) 5px max(5px, env(safe-area-inset-bottom)); }
+  .phone-shell { width: min(440px, calc(100vw - 10px)); height: calc(100dvh - max(10px, env(safe-area-inset-top)) - max(10px, env(safe-area-inset-bottom))); min-height: 0; padding: 6px; border-radius: 25px; }
+  .phone-app-area { border-radius: 19px; }
+}
+
+@media (max-width: 390px) {
+  .hud-brand-cluster { gap: 3px; }
+  .brand-badge { width: 88px; min-width: 88px; gap: 5px; padding: 5px; }
+  .brand-mark { width: 23px; height: 23px; flex-basis: 23px; }
+  .brand-copy strong { font-size: 8px; }
+  .brand-copy small { max-width: 49px; font-size: 5px; }
+  .quick-action { width: 31px; padding: 0; justify-content: center; }
+  .quick-action b { display: none; }
+  .hud-profile-chip { display: none; }
+  .hud-time-chip { min-width: 70px; }
+  .hud-weather-chip { min-width: 49px; }
+  .hud-money-chip { min-width: 75px; }
+  .hud-left-stack { width: 150px; }
+  .hud-job-card { width: 147px; }
+}
+
+/* Keep secondary screens inside the same neutral palette as the live HUD. */
+.expanded-map { background: #191c21; border-color: rgba(245,245,245,.11); }
+.panel-stat-card, .map-legend, .inventory-item, .character-stat-grid > div, .settings-row,
+.shop-item-card, .bank-info, .property-finance span, .furniture-shop-card, .placed-furniture-row,
+.nap-choice-facts > span, .empty-inventory {
+  background-color: rgba(255,255,255,.035);
+  border-color: rgba(245,245,245,.1);
+}
+.panel-stat-card > span, .map-legend > b, .inventory-summary > span, .inventory-summary small,
+.empty-inventory p, .inventory-item small, .character-art > div > span, .character-art small,
+.character-stat-grid > div > span, .character-stat-grid > div > small, .settings-row small,
+.settings-fixed-tag, .shop-banner > span, .shop-banner small, .shop-item-count, .shop-item-card p,
+.work-shift-card small, .bank-hero > span, .bank-hero small, .bank-info span, .bank-info p,
+.property-location, .property-description, .property-house-art > small, .furniture-intro p,
+.furniture-item-copy small, .placed-furniture-row small, .furniture-note, .nap-choice-panel p,
+.nap-choice-facts small, .panel-footnote { color: #B9BEC7; }
+.map-legend > span { color: #D9DCE2; }
+.inventory-summary, .character-art, .character-note, .shop-banner, .work-shift-card,
+.bank-info, .furniture-intro, .furniture-note, .nap-choice-facts > span { background-image: none; }
+.inventory-summary, .character-art { background-color: rgba(255,255,255,.035); border-color: rgba(245,245,245,.11); }
+.inventory-summary b, .inventory-item > strong, .shop-item-footer b, .property-finance b,
+.furniture-item-copy > span, .nap-choice-facts b, .zoom-setting strong { color: #E8BB65; }
+.empty-inventory > span, .item-glyph, .furniture-icon, .placed-furniture-icon,
+.shop-item-emoji, .shift-icon, .character-note > span, .nap-choice-icon { color: #F29A38; }
+.inventory-item > button, .shop-item-footer button, .work-shift-card button, .panel-primary-cta,
+.furniture-shop-card > button, .placed-furniture-row > button {
+  border-color: #F29A38;
+  background: #F29A38;
+  color: #17191D;
+}
+.inventory-item > button:disabled, .shop-item-footer button:disabled, .work-shift-card button:disabled,
+.panel-primary-cta:disabled, .furniture-shop-card > button:disabled { opacity: .45; background: #59616b; border-color: #59616b; color: #F5F5F5; filter: none; }
+.shop-banner, .work-shift-card, .bank-info, .furniture-intro { border-color: rgba(245,245,245,.1); background-color: rgba(255,255,255,.035); }
+.work-shift-card button { flex: 0 0 auto; }
+.bank-hero { background: linear-gradient(130deg, #292e35, #202329); border-color: rgba(232,187,101,.2); }
+.bank-hero h3 { color: #E8BB65; }
+.bank-hero > b { color: rgba(242,154,56,.35); }
+.panel-secondary-cta { color: #D9DCE2; background: rgba(255,255,255,.035); border-color: rgba(245,245,245,.12); }
+.property-house-art { background: linear-gradient(135deg, #42484e, #292d33); border-color: rgba(245,245,245,.11); }
+.property-house-art::before, .property-house-art::after { border-color: #E8BB65; background: #535b61; box-shadow: 0 -17px 0 -4px #F29A38; }
+.property-house-art > span { color: #F29A38; text-shadow: none; }
+.property-status.for-sale, .property-status.owned { color: #F6BD79; background: rgba(242,154,56,.1); }
+.property-finance span { color: #B9BEC7; }
+.character-avatar-large { border-color: #59616b; color: #17191D; background: linear-gradient(135deg, #F29A38, #E8BB65); }
+.character-note { color: #D9DCE2; background-color: rgba(255,255,255,.035); }
+.character-stat-grid > div > i em { background: #d87f68; }
+.character-stat-grid > div > i em.energy-fill { background: #E8BB65; }
+.toggle-switch { background: #444a52; }
+.toggle-switch.on { background: #F29A38; }
+.toggle-switch i { background: #F5F5F5; }
+.settings-fixed-tag { background: rgba(255,255,255,.06); color: #D9DCE2; }
+.zoom-setting input { accent-color: #F29A38; }
+.shop-item-emoji, .item-glyph, .furniture-icon, .placed-furniture-icon, .shift-icon { background: rgba(242,154,56,.11); }
+.furniture-shop-card > button:hover, .inventory-item > button:hover, .shop-item-footer button:hover,
+.work-shift-card button:hover, .panel-primary-cta:hover { background: #E8BB65; border-color: #E8BB65; }
+.furniture-note { background-color: rgba(255,255,255,.035); border: 1px solid rgba(245,245,245,.08); }
+.selected-furniture-tag { color: #F29A38; }
+.map-legend-dot, .kind-shop, .kind-restaurant, .kind-job, .kind-fuel { background: #F29A38; }
+.kind-bank, .kind-police, .kind-office { background: #9AA7AD; }
+.phone-app-icon { color: #F5F5F5; }
+.phone-grant-card, .phone-company-form { color: #D9DCE2; }
+.phone-grant-card { background: #292e35; border-color: rgba(242,154,56,.2); }
+.phone-grant-card > span, .phone-grant-card small, .phone-grant-card p { color: #B9BEC7; }
+.phone-grant-card strong { color: #E8BB65; }
+.phone-app-tile:focus-visible, .phone-action-row:focus-visible { outline-color: #F29A38; }
+
+@media (max-width: 800px) {
+  .interaction-prompt { width: min(250px, calc(100vw - 172px)); justify-content: center; }
+  .interaction-prompt .prompt-key, .interaction-prompt .prompt-tap { display: none; }
+}
+.game-panel-content, .phone-scroll-view { touch-action: pan-y; }

@@ -1,120 +1,159 @@
-# Axlori City
+# Axlori City — Third-Person District Life
 
-A small, playable browser prototype for an original Nigerian-inspired pixel-art life simulator. The game runs in Phaser 3; Next.js App Router hosts it and the responsive game UI. The world, characters, signs, furnishings, phone UI, and economy are original and drawn/generated locally—there are no paid APIs, AI APIs, Firebase, external game assets, real-money payments, or multiplayer services.
+Axlori City is a locally saved, browser-playable life-simulation prototype set in an original Nigerian-inspired district. The main game is a real-time 3D scene: a full-sized procedural resident, over-the-shoulder perspective camera, walk/run controls, a small explorable town, pedestrians, a drivable car, enterable homes, and a responsive phone/HUD.
 
-## Run it
+The game uses Next.js App Router, TypeScript, Three.js, and React Three Fiber. Its world and characters are built from lightweight original geometry; there are no GTA assets, external model downloads, paid services, AI APIs, Firebase, multiplayer, or real-money transactions. Currency, businesses, investments, marketplace rankings, weather, and saves are local/demo systems.
+
+## Quick start
 
 ### Requirements
 
 - Node.js **20.9 or later** and npm
-- A modern browser with Canvas/WebGL support
-
-### On a computer
+- A recent browser with WebGL support
+- For phones, Android Chrome is recommended
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`. The dev script binds Next.js to `0.0.0.0` so the same server can also be opened by a phone on the same Wi-Fi network. To check the project:
+Open `http://localhost:3000`. The development server binds to `0.0.0.0`, so another device on the same trusted Wi-Fi can use `http://YOUR-COMPUTER-LAN-IP:3000`.
+
+To verify a change:
 
 ```bash
 npm run typecheck
 npm run build
 ```
 
-### Run/test from an Android phone
+To run a production build locally:
 
-For reliable phone testing, the easiest path is to deploy the source to Vercel from the phone (instructions below), then open the deployment URL in Chrome. A local Termux run is also possible on supported Android devices:
+```bash
+npm run build
+npm run start
+```
 
-1. Install **Termux from F-Droid** (the Play Store build is often out of date).
-2. In Termux, allow storage access and install the tools:
+## Playing
+
+### Desktop
+
+- **Walk:** WASD or the arrow keys. Movement is relative to the camera.
+- **Run:** Hold **Shift**.
+- **Rotate camera:** Hold and drag the **right mouse button** over the game view.
+- **Interact:** **E** or the on-screen prompt.
+- **Phone:** **P** or tap **PHONE**.
+- **Map:** **M** or tap **MAP**.
+- **Menu:** **Escape** or **MENU**. The menu also has a manual save action.
+- **Save:** **F5**.
+
+Camera zoom is adjustable in **Menu → Settings**.
+
+### Android / touch
+
+- Drag the left virtual stick to walk. The stick steers while driving.
+- Drag the open/right side of the game screen to rotate the camera. Movement and camera drag can be used at the same time.
+- Hold **RUN** while walking.
+- Tap **INTERACT** near an object, person, building, car, or home; use **GO** and **BRAKE** while driving.
+- **PHONE** opens the in-game apps.
+
+The play surface fills the screen and prevents page scrolling while you play. Pointer capture and cancellation release the joystick, look drag, run, and driving controls when a touch is interrupted.
+
+## Things to try
+
+- **Explore:** Walk around the district roads, sidewalks, courtyard homes, market, park, fuel stop, taxi rank, and office blocks. Interact prompts appear close to usable locations and people.
+- **Talk to residents:** Several simple pedestrians follow short routes and can be greeted.
+- **Drive:** Walk to the orange **Boro Sprint**, interact to enter, steer with the movement control, and use **E/INTERACT** again to exit. The mobile interface shows accelerator and brake buttons while seated in the car.
+- **Homes:** Amara Court is the starter apartment. Visit a listed house to inspect and buy it with virtual Naira; return to its door to enter.
+- **Furniture and rest:** Open **FURNISH** inside a home. Buy pieces, place them on the floor, move or rotate them, and use the bed to take a 15-second nap that restores energy.
+- **Jobs:** Use the Phone → Jobs app or interact at a local work spot to accept a delivery, shop, or taxi shift. Follow the orange 3D marker and mini-map route.
+- **Money and business:** The phone includes a wallet, demo investments, vehicle/property apps, company registration and a simulated local marketplace/wealth list. The optional one-time **₦2,000,000 virtual founder grant** is a local test affordance, not real money.
+- **Clock and weather:** The clock reads the device's current local time. Lighting follows its day/night cycle; lightweight demo weather can change while playing.
+
+## Saves and limitations
+
+Progress is saved in browser `localStorage` under `axlori-city-save-v1`. It is tied to the browser profile and origin (for example, localhost and a Vercel URL have separate saves). Clearing site data, using private browsing, or changing browser/device can remove or separate the save. No account or server database is involved.
+
+This is a single-player local demo. It does not provide real banking, real investments, payments, multiplayer, an online leaderboard, server-side persistence, or production-scale city streaming. The map, market values, jobs, and weather are fictional gameplay data.
+
+## Run and deploy from an Android phone
+
+### Option A — Termux local development
+
+1. Install **Termux from F-Droid** and allow storage access:
 
    ```bash
    termux-setup-storage
    pkg update
-   pkg install nodejs-lts git unzip gh
+   pkg install nodejs-lts unzip git
    ```
 
-3. Download/unzip the project source into the phone's Downloads folder. In Termux:
+2. Download `axlori-city-source.zip` to the phone's Downloads folder. Extract the archive into a project directory (the ZIP contains the project files at its root):
 
    ```bash
-   cd ~/storage/downloads
-   unzip -o axlori-city-source.zip -d ~
+   mkdir -p ~/axlori-city
+   unzip -o ~/storage/downloads/axlori-city-source.zip -d ~/axlori-city
    cd ~/axlori-city
    node -v
-   npm install
+   npm ci
    npm run dev -- --port 3000
    ```
 
-   Keep Termux open, then visit **http://127.0.0.1:3000** in the phone's browser. The project needs Node 20.9+. Native Next.js tooling varies by Android/Termux build; if `npm install` reports a Next/SWC platform error, use the Vercel workflow below—Vercel builds on its supported Linux runtime and the resulting game still plays on the phone.
+3. Keep Termux open and visit **http://127.0.0.1:3000** in Chrome on the same phone. To open the development server on another device on the same trusted Wi-Fi, use the phone's LAN IP and port 3000. Do not expose a development server to an untrusted network.
 
-4. To test from a second device on the same Wi-Fi, find the Android/host device's LAN IP and open `http://DEVICE-LAN-IP:3000`. Do not expose the development server to an untrusted network.
+Some Android/Termux combinations do not have a compatible Next.js SWC binary. If `npm ci` or the build reports an unsupported platform/native-binary error, use Option B; Vercel builds the source on its supported runtime and the deployed site still plays in the phone browser.
 
-## Deploy to Vercel from a phone
+### Option B — Vercel deployment from a phone
 
-No paid APIs or environment variables are required. A free Vercel Hobby account is enough for a personal prototype; account/provider terms may change.
+No environment variables or paid services are required for the demo. Vercel account/provider terms can change; check the current plan before publishing.
 
-1. Put the project source in a GitHub repository. One phone-friendly route is to extract the source zip in Termux, then run:
+1. Put the source ZIP contents in a GitHub repository. You can upload files using GitHub's mobile website, or use Git in Termux. For a new repository, replace `YOUR-ACCOUNT` with your GitHub username:
 
    ```bash
    cd ~/axlori-city
    git init -b main
-   gh auth login
-   gh repo create axlori-city --public --source=. --remote=origin --push
+   git add .
+   git commit -m "Add Axlori City 3D district"
+   git remote add origin https://github.com/YOUR-ACCOUNT/axlori-city.git
+   git push -u origin main
    ```
 
-   Follow GitHub CLI's browser sign-in prompt on the phone. You can choose a private repository instead if you prefer.
+   GitHub authentication may require signing in through the browser or configuring a personal access token/SSH key; never put a token in the source ZIP or commit it to the repository.
 
-2. In the phone browser, open **vercel.com/new**, sign in with GitHub, and import the `axlori-city` repository.
-3. Keep the detected framework as **Next.js**. Use the repository root as the project root; leave the install command at `npm install` and the build command at `npm run build`. No environment variables are needed.
-4. Tap **Deploy**. When Vercel finishes, open the `.vercel.app` URL on Android Chrome. The game uses the full viewport and touch joystick/interact buttons.
-5. After code changes, push to the same GitHub branch; Vercel automatically creates a new deployment.
+2. In the phone browser, open **vercel.com/new**, sign in, and import the repository.
+3. Keep the detected framework as **Next.js** and the project root at the repository root. Use the lockfile-based install (`npm install` or `npm ci`) and build command `npm run build`. No environment variables are needed.
+4. Deploy, then open the supplied `.vercel.app` address in Android Chrome. WebGL must be available in the browser.
+5. For updates, push the changed files to the connected branch; Vercel will create a new deployment.
 
-The project is standard Next.js and can also be deployed with `npm run build` / `npm run start` on another compatible host.
-
-## Playing the prototype
-
-- **Walk:** WASD or arrow keys. On touch screens, drag the virtual stick.
-- **Interact:** E on keyboard, or the on-screen **INTERACT** button.
-- **Phone:** P on keyboard, or tap **PHONE**. Apps include Money, Jobs, Investments, My Cars, Properties, Companies, and Axlori Forbes.
-- **Map:** M or **MAP**.
-- **Menu:** Escape or **MENU**. It includes Resume, Map, Inventory, Character, Settings, and Save.
-- **Vehicle:** Walk close to the amber Boro Sprint and interact to enter/exit; steer with the same controls.
-- **Homes:** Amara Court is your starter apartment. Oruama Homes is a low-cost test listing; Koru Courtyard House is a higher-priced listing. Walk to a for-sale home to view/buy it, then interact again to enter after purchase.
-- **Furnishing:** While inside a home, tap **FURNISH**. Buy furniture or place an item already in your furniture bag, then tap a floor spot. Choose a placed item to move it; use the placement toolbar to rotate/remove/cancel.
-- **Nap:** Walk near a bed and interact, then choose **TAKE A NAP**. The 15-second rest locks normal movement/actions and restores energy at the end.
-- **Jobs:** Open Phone → Jobs to accept Delivery Worker, Shop Worker, or Taxi Driver shifts. Alternatively, interact with Axlori Couriers, Alao Market, or Riverside Taxi Rank. Shop shifts count down while near Alao Market; delivery/taxi routes complete when you reach their marked destination.
-- **Money/company testing:** Phone → Money contains an optional one-time **₦2,000,000 virtual founder test grant**, intended to make the ₦100,000 company-registration flow, furniture, investments, property, and demo company marketplace testable without grinding. This is fictional local-save currency and has no cash value.
-- **Clock/weather:** The clock follows the browser/device's current local time. City twilight uses that same time. Fictional Sunny/Cloudy/Rain conditions change randomly while playing; rain uses a lightweight pooled particle effect.
-
-All money, jobs, purchases, properties, furniture placement, company registrations, demo investments, and the grant remain virtual. Nothing is connected to a bank or payment provider.
-
-## Save data
-
-Progress is stored in browser `localStorage` under `axlori-city-save-v1`. The save contains player position, cash, active job, inventory, house/property ownership, car position/ownership, placed/owned furniture, companies, investments, grant status, and recent wallet activity. Saves are per browser origin/device; private browsing or clearing site data removes them. The save provider is behind an interface so a server/database adapter can replace local storage later.
+A local production server can also be run with `npm run build && npm run start` on a compatible Node.js host.
 
 ## Project layout
 
 ```text
 app/                         Next.js App Router and global styles
-components/                  Phaser host and responsive HTML HUD/phone UI
-game/GameScene.ts            Phaser scene orchestration and interactions
-game/player/                 Movement controller and generated character textures
-game/world/                  Original district layout, landmarks, art and collisions
-game/npcs/                   Lightweight pedestrian routes and interactions
-game/vehicles/               Boro Sprint driving and generated car art
-game/jobs/                   Delivery, shop-worker and taxi route data/logic
-game/inventory/              Virtual shop items and wallet inventory
-game/houses/                 Home entry and nap timer
-game/properties/             Local property listings and ownership
-game/furniture/              Furniture catalog, placement, rotation and storage
-game/companies/              Business creation and fictional company marketplace
-game/investments/            Simulated local investment listings
-game/time/                   Device-local clock adapter (replaceable with server time)
-game/weather/                Random weather state and pooled rain particles
-game/economy/                 Recent wallet transaction log
-game/save/                    SaveProvider seam and localStorage implementation
+components/GameCanvas.tsx     Client-only entry for the 3D renderer
+components/GameCanvasInner.tsx Three.js Canvas, GameRuntime and desktop input
+components/GameShell.tsx      HUD, touch controls, menus, map and phone UI
+components/ui/                Responsive in-game apps and district map
+game/runtime/GameRuntime.ts   Gameplay, movement, collisions, jobs and interactions
+game/scene/                  Procedural 3D world, character, vehicle, camera, home and weather
+game/world/CityLayout.ts     Map-to-world conversion, building specs and collision data
+game/world/landmarks.ts       District landmarks and interaction data
+game/jobs/                   Delivery, shop and taxi job definitions
+game/inventory/               Virtual items and wallet inventory
+game/houses/                  Home entry and nap timer
+game/properties/              Property listings and ownership
+game/furniture/               Furniture catalog, placement and storage
+game/companies/               Fictional local business marketplace
+game/investments/             Simulated demo investments
+game/time/                    Device-local clock
+
+game/weather/                 Random local weather state
+game/economy/                 Recent wallet activity
+game/save/                    Local save-provider interface and localStorage adapter
 ```
 
-The economy, clock, weather, property, company, furniture, and save modules are deliberately local/demo systems. Multiplayer, Supabase, online leaderboards, and real-money features are not implemented in this testing version.
+The renderer and gameplay data are separate: `GameRuntime` operates in the existing district coordinate system, while scene components convert that data to 3D. The 3D art is procedural and designed to keep the project dependency-light.
+
+## Checks
+
+For this 3D integration, `npm run typecheck` and `npm run build` completed successfully. The production server also returned the home page and expected document title over HTTP. A full browser interaction test and physical Android-device performance/playability test have **not** been performed yet.

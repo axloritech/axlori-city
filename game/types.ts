@@ -132,4 +132,7 @@ export type GameCommand =
 export interface GameCommandApi {
   command: (command: GameCommand) => void;
   move: (x: number, y: number) => void;
+  setRun: (active: boolean) => void;
+  look: (deltaX: number, deltaY: number, sensitivity?: number) => void;
+  setPedals: (accelerate: boolean, brake: boolean) => void;
 }

@@ -63,6 +63,8 @@ export default function GameShell() {
   const apiRef = useRef<GameCommandApi | null>(null);
   const stickRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
+  const stickPointerIdRef = useRef<number | null>(null);
+  const lookDragRef = useRef<{ pointerId: number; x: number; y: number } | null>(null);
   const napDeadlineRef = useRef<number | null>(null);
   const [napNow, setNapNow] = useState(() => Date.now());
   const isNapping = hud.napRemainingMs !== null;
@@ -89,6 +91,7 @@ export default function GameShell() {
   const command = useCallback((value: GameCommand) => apiRef.current?.command(value), []);
 
   const setVirtualStick = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (stickPointerIdRef.current !== event.pointerId) return;
     const element = stickRef.current;
     if (!element) return;
     const bounds = element.getBoundingClientRect();
@@ -104,19 +107,63 @@ export default function GameShell() {
     setStick({ x, y });
     apiRef.current?.move(x, y);
   };
-  const resetStick = () => {
+  const resetStick = (event?: React.PointerEvent<HTMLDivElement>) => {
+    if (event && stickPointerIdRef.current !== event.pointerId) return;
     draggingRef.current = false;
+    stickPointerIdRef.current = null;
     setStick({ x: 0, y: 0 });
     apiRef.current?.move(0, 0);
   };
   const pointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     draggingRef.current = true;
+    stickPointerIdRef.current = event.pointerId;
     event.currentTarget.setPointerCapture(event.pointerId);
     setVirtualStick(event);
   };
   const pointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     if (draggingRef.current) setVirtualStick(event);
+  };
+  const lookPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    lookDragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+  const lookPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = lookDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    apiRef.current?.look(event.clientX - drag.x, event.clientY - drag.y, 0.0052);
+    lookDragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+  };
+  const lookPointerEnd = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (lookDragRef.current?.pointerId === event.pointerId) lookDragRef.current = null;
+  };
+  const runPointerRef = useRef<number | null>(null);
+  const runDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    runPointerRef.current = event.pointerId;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    apiRef.current?.setRun(true);
+  };
+  const runUp = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (runPointerRef.current !== event.pointerId) return;
+    runPointerRef.current = null;
+    apiRef.current?.setRun(false);
+  };
+  const pedalPointers = useRef(new Map<number, "accelerate" | "brake">());
+  const updatePedals = () => {
+    const pedals = [...pedalPointers.current.values()];
+    apiRef.current?.setPedals(pedals.includes("accelerate"), pedals.includes("brake"));
+  };
+  const pedalDown = (event: React.PointerEvent<HTMLButtonElement>, pedal: "accelerate" | "brake") => {
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    pedalPointers.current.set(event.pointerId, pedal);
+    updatePedals();
+  };
+  const pedalUp = (event: React.PointerEvent<HTMLButtonElement>) => {
+    pedalPointers.current.delete(event.pointerId);
+    updatePedals();
   };
 
   const openPanel = (panel: PanelName | null) => command({ type: "set-panel", panel });
@@ -132,6 +179,7 @@ export default function GameShell() {
       <div className="game-vignette" aria-hidden="true" />
 
       <div className="game-hud">
+        <div className="camera-look-pad" onPointerDown={lookPointerDown} onPointerMove={lookPointerMove} onPointerUp={lookPointerEnd} onPointerCancel={lookPointerEnd} onLostPointerCapture={lookPointerEnd} aria-label="Drag to rotate the camera" />
         <header className="hud-top-row">
           <div className="hud-brand-cluster">
             <button className="brand-badge" onClick={() => openPanel("menu")} aria-label="Open game menu">
@@ -210,12 +258,16 @@ export default function GameShell() {
             <span className="stick-direction stick-up" /><span className="stick-direction stick-down" /><span className="stick-direction stick-left" /><span className="stick-direction stick-right" />
             <span className="stick-nub" style={{ transform: `translate(calc(-50% + ${stick.x * 31}px), calc(-50% + ${stick.y * 31}px))` }} />
           </div>
-          <span className="stick-label">MOVE</span>
+          <span className="stick-label">{hud.driving ? "STEER" : "MOVE"}</span>
         </div>
 
         <div className="mobile-action-stack">
           {hud.insideHouse && <button className="mobile-furnish-button" onClick={() => openPanel("furniture")}>⌂ FURNISH</button>}
           {hud.prompt && <button className="mobile-interact-button" onClick={() => command({ type: "interact" })}><span>✦</span>INTERACT</button>}
+          {hud.driving ? <div className="mobile-drive-controls">
+            <button aria-label="Accelerate" onPointerDown={(event) => pedalDown(event, "accelerate")} onPointerUp={pedalUp} onPointerCancel={pedalUp} onLostPointerCapture={pedalUp}>GO ↑</button>
+            <button aria-label="Brake and reverse" onPointerDown={(event) => pedalDown(event, "brake")} onPointerUp={pedalUp} onPointerCancel={pedalUp} onLostPointerCapture={pedalUp}>BRAKE ↓</button>
+          </div> : <button className="mobile-run-button" onPointerDown={runDown} onPointerUp={runUp} onPointerCancel={runUp} onLostPointerCapture={runUp}>⇧ RUN</button>}
           <button className="mobile-phone-button" onClick={() => openPanel("phone")}><span>▯</span>PHONE</button>
         </div>
 

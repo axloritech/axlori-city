@@ -7,14 +7,14 @@ type Props = {
 };
 
 const colors: Record<string, string> = {
-  house: "#e8bb6a",
-  shop: "#e1774e",
-  restaurant: "#d68b68",
-  bank: "#95b39a",
-  job: "#f2ce6b",
-  police: "#88a9b5",
-  office: "#9aaab0",
-  fuel: "#dfbe68",
+  house: "#E8BB65",
+  shop: "#F29A38",
+  restaurant: "#CD7756",
+  bank: "#A4B6BA",
+  job: "#F29A38",
+  police: "#93AAB4",
+  office: "#9AA7AD",
+  fuel: "#E8BB65",
 };
 
 export default function CityMap({ player, target = null, large = false }: Props) {
@@ -25,11 +25,11 @@ export default function CityMap({ player, target = null, large = false }: Props)
 
   return (
     <svg viewBox="0 0 240 176" className="city-map" role="img" aria-label="Axlori City map with roads and location markers">
-      <rect width="240" height="176" rx="12" fill="#788f60" />
-      <path d="M0 50H240M0 112H240M79 0V176M161.5 0V176" stroke="#d2c8a7" strokeWidth="13" />
-      <path d="M0 50H240M0 112H240M79 0V176M161.5 0V176" stroke="#454b49" strokeWidth="9" />
-      <path d="M0 50H240M0 112H240M79 0V176M161.5 0V176" stroke="#d4b654" strokeWidth="0.8" strokeDasharray="4 5" opacity=".85" />
-      <rect x="9" y="128" width="40" height="37" rx="5" fill="#6c9b67" stroke="#cad09b" strokeWidth="1.4" />
+      <rect width="240" height="176" rx="12" fill="#707c70" />
+      <path d="M0 50H240M0 112H240M79 0V176M161.5 0V176" stroke="#b9b3a5" strokeWidth="13" />
+      <path d="M0 50H240M0 112H240M79 0V176M161.5 0V176" stroke="#363d43" strokeWidth="9" />
+      <path d="M0 50H240M0 112H240M79 0V176M161.5 0V176" stroke="#E8BB65" strokeWidth="0.8" strokeDasharray="4 5" opacity=".85" />
+      <rect x="9" y="128" width="40" height="37" rx="5" fill="#61785e" stroke="#c5bda9" strokeWidth="1.4" />
       <path d="M12 146H46M29 131V162" stroke="#ded2a0" strokeWidth="2.2" />
       <rect x="87" y="7" width="66" height="34" rx="4" fill="#8a9f6a" opacity=".55" />
       <rect x="87" y="65" width="66" height="35" rx="4" fill="#819660" opacity=".45" />
